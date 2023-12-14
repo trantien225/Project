@@ -1,0 +1,91 @@
+﻿@{ ViewBag.Title = "Admin"; }
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label for="ddlYear" class="form-label">Select Year:</label>
+            <select id="ddlYear" class="form-select" style="width:150px;">
+                <option value="0">-- Select Year --</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <canvas id="myChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var currentYear = new Date().getFullYear();
+        var selectYear = $("#ddlYear");
+
+        for (var year = currentYear; year >= 2000; year--) {
+            selectYear.append("<option value='" + year + "'>" + year + "</option>");
+        }
+    });
+    $(document).ready(function () {
+        var currentYear = new Date().getFullYear();
+        var selectYear = $("#ddlYear");
+
+        for (var year = currentYear; year >= 2000; year--) {
+            selectYear.append("<option value='" + year + "'>" + year + "</option>");
+        }
+    });
+</script>
+
+
+@section scripts{
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+
+        $('#ddlYear').on('change', function () {
+            var year = $(this).val();
+            $.get('/admin/Products/GetReportProductByYear?Year=' + year, function (resp) {
+                var existingChart = Chart.getChart("myChart");
+                if (existingChart) {
+                    existingChart.destroy();
+                }
+                RegisterChartProduct(resp)
+            });
+        });
+        function RegisterChartProduct(lsdata) {
+            var lsLabel = [];
+            var lsDataSource = [];
+            $.each(lsdata, function (index, item) {
+                lsLabel.push(item.Name);
+                lsDataSource.push(item.Total);
+            });
+            console.log(lsLabel);
+            console.log(lsDataSource);
+            const ctx = document.getElementById('myChart').getContext("2d");;
+            var a = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: lsLabel,
+                    datasets: [{
+                        label: '# Tổng tiền (VNĐ)',
+                        data: lsDataSource,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                },
+                destroy: true
+            });
+        }
+
+    </script>
+}

@@ -1,0 +1,235 @@
+﻿@model List<Project.Models.Product>
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+
+    .pagination > li > a {
+        border-radius: 50% !important;
+        margin: 10px;
+        background-color: red;
+        color: white;
+        padding: 2rem;
+    }
+
+        .pagination > li > a:hover {
+            color: black;
+        }
+</style>
+<link rel="stylesheet" href="~/assets/css/product.css">
+<script>
+    function checkgia(index) {
+        var radios = document.getElementsByName('optradio');
+        var selectedRadio = null;
+
+        for (var i = 0; i < radios.length; i++) {
+            if (radios[i].checked) {
+                selectedRadio = radios[i];
+                break;
+            }
+        }
+
+        if (selectedRadio) {
+            var selectedValue = selectedRadio.value;
+            console.log(selectedValue);  // Thêm dòng này để kiểm tra giá trị được truyền đúng hay không
+
+            // Sử dụng Ajax để gọi hàm xử lý trên server
+            $.ajax({
+                type: 'POST',
+                url: '/Products/FilterProductsByPrice',
+                data: { priceRange: selectedValue },
+                success: function (result) {
+                    // Cập nhật giao diện với PartialView mới
+                    $('#products').html(result);
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        }
+    }
+</script>
+<div class="product">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-12 hidden-xs hidden-sm">
+                <div class="product__filter">
+                    <div class="product__filter-price">
+                        <h4 class="product__filter-heading">
+                            Khoảng giá <i class="fi-rs-minus" onclick="khonghienthidanhsach(1,`khoanggia`)" id="minus-1"></i> <i class="fi-rs-plus hidden" id="plus-1" onclick="khonghienthidanhsach(1,`khoanggia`)"></i>
+                        </h4>
+                        <ul id="khoanggia" class="product__filter-ckeckbox">
+                            <li class="product__filter-item">
+                                <label class="form-check-label" for="kg1">
+                                    <input type="radio" class="form-check-input checkGia" id="kg1" name="optradio" value="0-9000000" onclick="checkgia(1)"><span>Dưới 9,000,000đ</span>
+                                </label>
+                            </li>
+                            <li class="product__filter-item">
+                                <label class="form-check-label" for="kg2">
+                                    <input type="radio" class="form-check-input checkGia" id="kg2" name="optradio" value="9000000-15000000" onclick="checkgia(2)"><span>9,000,000đ->15,000,000đ</span>
+                                </label>
+                            </li>
+                            <li class="product__filter-item">
+                                <label class="form-check-label" for="kg3">
+                                    <input type="radio" class="form-check-input checkGia" id="kg3" name="optradio" value="15000000-20000000" onclick="checkgia(3)"><span>15,000,000đ->20,000,000đ</span>
+                                </label>
+                            </li>
+                            <li class="product__filter-item">
+                                <label class="form-check-label" for="kg4">
+                                    <input type="radio" class="form-check-input checkGia" id="kg4" name="optradio" value="20000000-30000000" onclick="checkgia(4)"><span>20,000,000đ->30,000,000đ</span>
+                                </label>
+                            </li>
+                            <li class="product__filter-item">
+                                <label class="form-check-label" for="kg5">
+                                    <input type="radio" class="form-check-input checkGia" id="kg5" name="optradio" value="30000000-100000000" onclick="checkgia(5)"><span>Trên 30,000,000đ</span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="product__filter-trademark">
+                        <h4 class="product__filter-heading">
+                            Thương hiệu <i class="fi-rs-minus" id="minus-2"></i> <i class="fi-rs-plus hidden" id="plus-2"></i>
+                        </h4>
+                        <ul id="thuonghieu" class="product__filter-ckeckbox">
+                            <li class="product__filter-item">
+                                <label class="form-check-label" for="th1">
+                                    <input type="checkbox" class="form-check-input checkthuonghieu checkthuonghieu" id="th1" name="option2"
+                                           value="something"><span>Iphone</span>
+                                </label>
+                            </li>
+                            <li class="product__filter-item">
+                                <label class="form-check-label" for="th1">
+                                    <input type="checkbox" class="form-check-input checkthuonghieu checkthuonghieu" id="th1" name="option2"
+                                           value="something"><span>SamSung</span>
+                                </label>
+                            </li>
+                            <li class="product__filter-item">
+                                <label class="form-check-label" for="th1">
+                                    <input type="checkbox" class="form-check-input checkthuonghieu checkthuonghieu" id="th1" name="option2"
+                                           value="something"><span>Oppo</span>
+                                </label>
+                            </li>
+                            <li class="product__filter-item">
+                                <label class="form-check-label" for="th1">
+                                    <input type="checkbox" class="form-check-input checkthuonghieu checkthuonghieu" id="th1" name="option2"
+                                           value="something"><span>Realme</span>
+                                </label>
+                            </li>
+                            <li class="product__filter-item">
+                                <label class="form-check-label" for="th1">
+                                    <input type="checkbox" class="form-check-input checkthuonghieu checkthuonghieu" id="th1" name="option2"
+                                           value="something"><span>Vivo</span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 col-12">
+                <div class="sort-wrap row">
+                    <div class="sort-left col-12 col-lg-6">
+                        <h1 class="coll-name">Tất cả sản phẩm</h1>
+                    </div>
+                    <div class="sort-right col-12 col-lg-6">
+                        <div class="sortby">
+                            <label for="">Sắp xếp theo:</label>
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown">
+                                    Chọn
+                                </button>
+                                <div class="dropdown-menu" style="width: 143px;">
+                                    @Html.ActionLink("Giá: Tăng dần", "Index", new { Sort = 1, controller = "Products" }, htmlAttributes: new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Giá: Giảm dần", "Index", new { Sort = 2, controller = "Products" }, htmlAttributes: new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Tên A-Z", "Index", new { Sort = 3, controller = "Products" }, htmlAttributes: new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Tên Z-A", "Index", new { Sort = 4, controller = "Products" }, htmlAttributes: new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Cũ nhất", "Index", new { Sort = 5, controller = "Products" }, htmlAttributes: new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Mới nhất", "Index", new { Sort = 6, controller = "Products" }, htmlAttributes: new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Bán chạy nhất", "Index", new { Sort = 7, controller = "Products" }, htmlAttributes: new { @class = "dropdown-item" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sortby2 hidden" style="float: right;">
+                            <div class="dropdown">
+                                <button class="btn btn-dark dropdown-toggle" id="filter">
+                                    Lọc sản phẩm
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-product" id="products">
+                    @foreach (var item in Model)
+                    {
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            @{
+                                Html.RenderAction("DisPlaySingleProduct", "Products", new { p = item });
+                            }
+                        </div>
+                    }
+                </div>
+                <div>
+                    <ul class="pagination justify-content-center">
+
+                        <li class="page-item">
+                            @if (ViewBag.page == 1)
+                            {
+                                <a class="page-link disabled" href="/products/index?Sort=#" aria-label="Previous">
+                                    <span aria-hidden="true"><</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            }
+                            else
+                            {
+                                int PrePage = ViewBag.Page - 1;
+                                <a class="page-link" href="/products/index?Sort=@ViewBag.Sort&page=@PrePage" aria-label="Previous">
+                                    <span aria-hidden="true"><</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            }
+                        </li>
+                        @for (int i = 0; i < ViewBag.NoOfPages; i++)
+                        {
+                            if (i + 1 == ViewBag.Page)
+                            {
+                                <li class="page-item">
+                                    <a style="background-color:white;color:black" class="page-link" href="/products/index?Sort=@ViewBag.Sort&page=@(i+1)">@(i+1)</a>
+                                </li>
+                            }
+                            else
+
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" href="/products/index?Sort=@ViewBag.Sort&page=@(i+1)">@(i+1)</a>
+                                </li>
+                            }
+
+                        }
+
+                        <li class="page-item">
+                            @if (ViewBag.page == ViewBag.NoOfPages)
+                            {
+                                <a class="page-link disabled" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            }
+                            else
+                            {
+                                int NetPage = ViewBag.Page + 1;
+                                <a class="page-link" href="/products/index?Sort=@ViewBag.Sort&page=@NetPage" aria-label="Previous">
+                                    <span aria-hidden="true">></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            }
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section script{
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI/t1u1AAeiA8z1/KJ5uvfopF8TlZp5ek+xS/Z9k=" crossorigin="anonymous"></script>
+}

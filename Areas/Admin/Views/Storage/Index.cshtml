@@ -1,0 +1,92 @@
+﻿@model List<Project.Models.Storage>
+
+@{
+    ViewBag.Title = "Storage";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutPage1.cshtml";
+}
+@section naviheader{
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="~/admin/Content/Clients/index.html" class="nav-link">Home</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="~/admin/Storage/Index" class="nav-link">Nhập Hàng</a>
+        </li>
+    </ul>
+}
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title text-uppercase">Danh sách phiếu nhập</h3>
+
+            <div class="card-tools">
+                <a href="/Admin/Storage/Create" class="btn btn-primary">Nhập hàng</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID phiếu nhập</th>
+                        <th>ID sản phẩm</th>
+                        <th>Số Lượng</th>
+                        <th>Giá Nhập</th>
+                        <th>Đơn vị</th>
+                        <th>Ngày nhập</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        for (int i = 0; i < Model.Count(); i++)
+                        {
+                    <tr id="trow-@Model[i].Id">
+                        <td>
+                            @Html.TextBox("Storages[" + i + "].Id", Model[i].Id, new { @readonly = "readonly" })
+                        </td>
+                        <td>
+                            @Html.TextBox("Storages[" + i + "].ProductId", Model[i].ProductId, htmlAttributes: new { @class = "form-control" })
+                        </td>
+                        <td>
+                            @Html.TextBox("Storages[" + i + "].Quantity", Model[i].Quantity, htmlAttributes: new { @class = "form-control" })
+                        </td>
+                        <td>
+                            @Html.TextBox("Storages[" + i + "].Price", Model[i].Price, htmlAttributes: new { @class = "form-control" })
+                        </td>
+                        <td>
+                            @Html.TextBox("Storages[" + i + "].Unit", Model[i].Unit, htmlAttributes: new { @class = "form-control" })
+                        </td>
+                        <td>
+                            @Html.TextBox("Storages[" + i + "].DateCreate", Model[i].DateCreate, htmlAttributes: new { @class = "form-control" })
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-id="@Model[i].Id" onclick="GetId(`@Model[i].ProductId`,@Model[i].Id)">
+                                Xóa
+                            </button>
+                        </td>
+                    </tr>
+                        }
+                        @*<tr colspan="2">
+                            <td> <input type="submit" class="btn btn-primary" value="Lưu"></td>
+                        </tr>*@
+
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4"> Không có bản ghi nào</td>
+                        </tr>
+                    }
+                </tbody>
+
+
+            </table>
+        </div>
+    </div>
+
+</section>
